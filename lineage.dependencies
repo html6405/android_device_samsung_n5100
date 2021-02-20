@@ -4,12 +4,12 @@
         "target_path": "device/samsung/smdk4412-common"
     },
     {
-        "repository": "android_device_samsung_kona-common",
-        "target_path": "device/samsung/kona-common"
-    },
-    {
         "repository": "android_kernel_samsung_smdk4412",
         "target_path": "kernel/samsung/smdk4412"
+    },
+    {
+        "repository": "android_device_samsung_n80xx-common",
+        "target_path": "device/samsung/n80xx-common"
     },
     {
         "repository": "android_packages_apps_SamsungServiceMode",

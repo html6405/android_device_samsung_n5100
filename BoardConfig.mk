@@ -14,27 +14,10 @@
 # limitations under the License.
 #
 
+# Include n80xx BoardConfigCommon
 -include device/samsung/kona-common/BoardConfigCommon.mk
-
-LOCAL_PATH := device/samsung/n5100
-
-# Inline kernel building
-TARGET_KERNEL_SOURCE := kernel/samsung/smdk4412
-TARGET_KERNEL_CONFIG := lineageos_n5100_defconfig
-BOARD_RIL_CLASS := ../../../device/samsung/n5100/ril
-BOARD_GLOBAL_CFLAGS += -DDISABLE_ASHMEM_TRACKING
-
-TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
-
-# RIL
-BOARD_PROVIDES_LIBRIL := true
-BOARD_MODEM_TYPE := xmm6262
-
-# Recovery
-TARGET_RECOVERY_FSTAB := device/samsung/kona-common/rootdir/fstab.smdk4x12
-RECOVERY_FSTAB_VERSION := 2
-BOARD_RECOVERY_SWIPE := true
-BOARD_RECOVERY_SWIPE_SWAPXY := true
 
 # assert
 TARGET_OTA_ASSERT_DEVICE := GT-N5100,kona3g,n5100,kona3gxx
+N5100 := true
+TARGET_KERNEL_CONFIG := lineageos_n5100_defconfig

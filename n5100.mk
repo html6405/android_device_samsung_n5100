@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2016 The CyanogenMod Project
+# Copyright (C) 2017 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,22 +14,18 @@
 # limitations under the License.
 #
 
+$(call inherit-product, device/samsung/kona-common/kona-common.mk)
+
 LOCAL_PATH := device/samsung/n5100
 
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
-# RIL
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.telephony.ril_class=SamsungExynos4RIL
-
-# These are the hardware-specific features
+# Rootdir
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/include/hardware/gps.xml:system/etc/gps.xml \
-    $(LOCAL_PATH)/include/hardware/gps.xml:vendor/etc/gps.xml \
-    frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
-    frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
-    frameworks/native/data/etc/android.software.sip.xml:system/etc/permissions/android.software.sip.xml \
-    frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml
+    device/samsung/n5100/rootdir/init.target.rc:root/init.target.rc \
+    $(LOCAL_PATH)/rootdir/init.target.usb.rc:root/init.target.usb.rc
 
-$(call inherit-product, vendor/samsung/n5100/n5100-vendor.mk)
-$(call inherit-product, device/samsung/kona-common/kona-common.mk)
+$(call inherit-product-if-exists, vendor/samsung/5100/n5100-vendor.mk)
+
+# Vendor properties
+-include $(LOCAL_PATH)/vendor_prop.mk

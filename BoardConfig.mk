@@ -21,3 +21,7 @@
 TARGET_OTA_ASSERT_DEVICE := GT-N5100,kona3g,n5100,kona3gxx
 N5100 := true
 TARGET_KERNEL_CONFIG := lineageos_n5100_defconfig
+
+# Selinux
+BOARD_SEPOLICY_DIRS += \
+    device/samsung/kona-common/selinux

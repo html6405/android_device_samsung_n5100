@@ -1,108 +1,348 @@
-import /init.target.usb.rc
-
+############################
 on init
-    export LD_SHIM_LIBS /system/lib/libsec-ril.so|libsamsung_symbols.so
+############################
 
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/boost_freq
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/boost_lock_time
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/boost_mincpus
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/cpu_down_freq
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/cpu_down_rate
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/cpu_up_freq
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/cpu_up_rate
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/cpucore_table
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/down_differential
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/dvfs_debug
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/freq_step
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/hotplug_freq_1_1
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/hotplug_freq_2_0
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/hotplug_freq_2_1
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/hotplug_freq_3_0
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/hotplug_freq_3_1
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/hotplug_freq_4_0
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/hotplug_lock
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/hotplug_rq_1_1
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/hotplug_rq_2_0
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/hotplug_rq_2_1
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/hotplug_rq_3_0
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/hotplug_rq_3_1
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/hotplug_rq_4_0
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/ignore_nice_load
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/io_is_busy
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/up_threshold
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/min_cpu_lock
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/max_cpu_lock
-    chown system system /sys/devices/system/cpu/cpufreq/pegasusq/sampling_rate
+# Missing symbols
+    export LD_SHIM_LIBS /system/lib/libsec-ril.so|libsamsung_symbols.so:/system/bin/gpsd|libsamsung_symbols.so
 
-on boot
-    # Flash storage isn't a good entropy source, and only causes
-    # locking overhead in the kernel. Turn it off.
-    write /sys/block/mmcblk0/queue/add_random 0
-    write /sys/block/mmcblk1/queue/add_random 0
+# Vibetonz
+    export VIBE_PIPE_PATH /dev/pipes
+    mkdir /dev/pipes 0771 system system
 
-    # Swapping 1 page at a time is ok
-    write /proc/sys/vm/page-cluster 0
-    write /proc/sys/vm/swappiness 100
-
-    # increase read-ahead value to 256 kb
-    write /sys/block/mmcblk0/queue/read_ahead_kb 256
-
+############################
 on post-fs-data
+############################
 
-# serial keyboard port
-	chown root system /dev/ttySAC2
-	chmod 0660 /dev/ttySAC2
+# Telephony
+    chmod 0666 /proc/cmdline
+    symlink /data/user_de/0/com.android.providers.telephony/databases /data/data/com.android.providers.telephony/databases
+    symlink /data/user_de/0/com.android.providers.telephony/shared_prefs /data/data/com.android.providers.telephony/shared_prefs
 
-# icd
-    exec icd_check
-    chown system system /dev/icd
-    chmod 0644 /dev/icd
-    write /dev/icdr 0
-    chown system system /dev/icdr
-    chmod 0644 /dev/icdr
-    chown system system /dev/tzic
+# Geomagnetic daemon
+    write /data/system/yas.cfg 0
+    restorecon /data/system/yas.cfg
+
+# Qualcomm Modem requirement
+    mkdir /data/cp_log
+    chmod 0775 /data/cp_log
+    chown system radio /data/cp_log
+    mkdir /dev/block/modem
+    symlink /dev/block/platform/dw_mmc/by-name/m9kefs1 /dev/block/modem/m9kefs1
+    symlink /dev/block/platform/dw_mmc/by-name/m9kefs2 /dev/block/modem/m9kefs2
+    symlink /dev/block/platform/dw_mmc/by-name/m9kefs3 /dev/block/modem/m9kefs3
+    symlink /dev/block/platform/dw_mmc/by-name/ /dev/block/modem/dump_path
+    chown system radio /dev/block/modem/m9kefs1
+    chmod 0775 /dev/block/modem/m9kefs1
+    chown system radio /dev/block/modem/m9kefs2
+    chmod 0775 /dev/block/modem/m9kefs2
+    chown system radio /dev/block/modem/m9kefs3
+    chmod 0775 /dev/block/modem/m9kefs3
+    chown system radio /dev/block/modem/dump_path
+    chmod 0775 /dev/block/modem/dump_path
+    mkdir /firmware 0771 system system
+    chown system system /tombstones
+    chmod 0775 /tombstones
+    mkdir /tombstones/modem 0775 system system
+    mkdir /tombstones/lpass 0775 system system
+    mkdir /tombstones/wcnss 0775 system system
+    mkdir /tombstones/dsps 0775 system system
+    rmdir /tombstones/qcks
+    mkdir /tombstones/qcks 771 system system
+    rmdir /tombstones/efs
+    mkdir /tombstones/efs 771 system system
+    chown system radio /dev/block/platform/dw_mmc/by-name
+    chmod 0775 /dev/block/platform/dw_mmc/by-name
+
+# Qualcomm RIL
+# Create QMUX deamon socket area
+    mkdir /dev/socket/qmux_radio 0777 radio radio
+    chmod 2777 /dev/socket/qmux_radio
+    mkdir /dev/socket/qmux_audio 0777 media audio
+    chmod 2777 /dev/socket/qmux_audio
+    mkdir /dev/socket/qmux_gps 0777 gps gps
+    chmod 2777 /dev/socket/qmux_gps
+    chmod 660 /dev/socket/qmux_gps/qmux_client_socket
+    chmod 660 /dev/socket/qmux_gps/qmux_connect_socket
+
+# Allow QMUX daemon to assign port open wait time
+    chown radio radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
+    chmod 666 /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
+
+# Waketime fot fast dormancy
+    chown system radio /sys/devices/platform/mdm_hsic_pm0/waketime
+    chmod 0666 /sys/devices/platform/mdm_hsic_pm0/waketime
+    chown radio radio /sys/class/sec/switch/uart_sel
+    chown radio radio /sys/power/wake_lock
+    chown radio radio /sys/power/wake_unlock
+    chown radio radio /sys/devices/virtual/smdpkt/smdcntl0/open_timeout
+    chown radio radio /sys/module/f_rmnet/parameters/rmnet_ctl_ch
+    chown radio radio /sys/module/rmnet/parameters/rmnet_ctl_ch
+    chown radio radio /sys/class/sec/slot_switch/slot_sel
+    chown radio radio /sys/block/mmcblk0/device/name
+    chown radio radio /sys/block/mmcblk0/device/cid
+    chown radio radio /sys/module/rmnet_usb/parameters/dump_ctrl_msg
+    chown radio radio /sys/class/sec/sec_key/hall_irq_ctrl
+    chown radio radio /sys/devices/virtual/misc/multipdp/waketime
+    chmod 666 /sys/power/wake_unlock
+    chmod 666 /sys/class/sec/switch/uart_sel
+    chmod 666 /sys/block/mmcblk0/device/name
+    chmod 666 /sys/block/mmcblk0/device/cid
+    chmod 666 /sys/power/wake_lock
+    chmod 666 /sys/devices/virtual/smdpkt/smdcntl0/open_timeout
+    chmod 666 /sys/module/f_rmnet/parameters/rmnet_ctl_ch
+    chmod 666 /sys/module/rmnet/parameters/rmnet_ctl_ch
+    chmod 666 /sys/class/sec/slot_switch/slot_sel
+    chmod 666 /sys/module/rmnet_usb/parameters/dump_ctrl_msg
+    chmod 666 /sys/class/sec/sec_key/hall_irq_ctrl
+    chmod 666 /sys/devices/virtual/misc/multipdp/waketime
+
+# MTP device permission
+    chmod 0666 /dev/usb_mtp_gadget
+    chown system mtp /dev/usb_mtp_gadget
+
+# Permissions for Gscaler log level
+    chmod 0666 /sys/module/gsc/parameters/gsc_dbg
+
+# OTG_TEST
+    chown system radio /sys/class/host_notify/usb_otg/booster
+    chmod 0666 /sys/class/host_notify/usb_otg/booster
+
+# Input Events
+    chown system input /sys/class/input/input2/enable
+    chown system input /sys/class/input/input2/poll_delay
+    chown system input /sys/class/input/input2/delay
+    chown system input /sys/class/input/input3/enable
+    chown system input /sys/class/input/input3/poll_delay
+    chown system input /sys/class/input/input3/delay
+    chown system input /sys/class/input/input4/enable
+    chown system input /sys/class/input/input4/poll_delay
+    chown system input /sys/class/input/input4/delay
+    chown system input /sys/class/input/input5/enable
+    chown system input /sys/class/input/input5/poll_delay
+    chown system input /sys/class/input/input5/delay
+    chown system input /sys/class/input/input6/enable
+    chown system input /sys/class/input/input6/poll_delay
+    chown system input /sys/class/input/input6/delay
+    chown system input /sys/class/input/input7/enable
+    chown system input /sys/class/input/input7/poll_delay
+    chown system input /sys/class/input/input7/delay
+    chown system input /sys/class/input/input8/enable
+    chown system input /sys/class/input/input8/poll_delay
+    chown system input /sys/class/input/input8/delay
+    chown system input /sys/class/input/input9/enable
+    chown system input /sys/class/input/input9/poll_delay
+    chown system input /sys/class/input/input9/delay
+
+# Accelerometer_sensor
+    chown system radio /dev/accelerometer
+    chown system radio /sys/class/sensors/accelerometer_sensor
+    chown system radio /sys/class/sensors/accelerometer_sensor/raw_data
+    chown system radio /sys/class/sensors/accelerometer_sensor/calibration
+    chown system radio /sys/class/sensors/accelerometer_sensor/reactive_alert
+    chown system radio /sys/class/sensors/accelerometer_sensor/vendor
+    chown system radio /sys/class/sensors/accelerometer_sensor/name
+
+# Proximity_sensor
+    chown system radio /sys/class/sensors/proximity_sensor/state
+    chown system radio /sys/class/sensors/proximity_sensor/prox_avg
+    chown system radio /sys/class/sensors/proximity_sensor/prox_cal
+    chown system radio /sys/class/sensors/proximity_sensor/vendor
+    chown system radio /sys/class/sensors/proximity_sensor/name
+    chown system radio /sys/class/sensors/proximity_sensor/prox_thresh
+
+# Light_sensor
+    chown system radio /sys/class/sensors/light_sensor/lux
+    chown system radio /sys/class/sensors/light_sensor/raw_data
+    chown system radio /sys/class/sensors/light_sensor/vendor
+    chown system radio /sys/class/sensors/light_sensor/name
+
+# Grip_sensor
+    chown system radio /sys/class/sensors/grip_sensor/raw_data
+    chown system radio /sys/class/sensors/grip_sensor/threshold
+    chown system radio /sys/class/sensors/grip_sensor/calibration
+    chown system radio /sys/class/sensors/grip_sensor/onoff
+    chown system radio /sys/class/sensors/grip_sensor/vendor
+    chown system radio /sys/class/sensors/grip_sensor/name
+
+# Magnetic Sensor
+    chmod 0777 /dev/i2c-10
+    chown system radio /sys/class/sensors/magnetic_sensor/raw_data
+    chown system radio /sys/class/sensors/magnetic_sensor/selftest
+    chown system radio /sys/class/sensors/magnetic_sensor/vendor
+    chown system radio /sys/class/sensors/magnetic_sensor/name
+    chown system input /sys/class/input/input3/filter_enable
+    chown system input /sys/class/input/input3/filter_len
+    chown system input /sys/class/input/input3/data
+    chown system input /sys/class/input/input3/status
+    chown system input /sys/class/input/input3/wake
+    chown system input /sys/class/input/input3/position
+    chown system input /sys/class/input/input4/filter_enable
+    chown system input /sys/class/input/input4/filter_len
+    chown system input /sys/class/input/input4/data
+    chown system input /sys/class/input/input4/status
+    chown system input /sys/class/input/input4/wake
+    chown system input /sys/class/input/input4/position
+    chown compass input /sys/class/input/input4/offsets
+    chown compass input /sys/class/input/input4/dynamic_matrix
+    chown system input /sys/class/input/input4/threshold
+    chown system input /sys/class/input/input4/distortion
+    chown system input /sys/class/input/input4/shape
+    write /sys/class/input/input4/distortion "350 50 15"
+    write /sys/class/input/input4/static_matrix "10602 -980 25 -830 10470 -188 2753 1005 9019"
+    chown system input /sys/class/input/input5/filter_enable
+    chown system input /sys/class/input/input5/filter_len
+    chown system input /sys/class/input/input5/data
+    chown system input /sys/class/input/input5/status
+    chown system input /sys/class/input/input5/wake
+    chown system input /sys/class/input/input5/position
+    chown compass input /sys/class/input/input5/offsets
+    chown compass input /sys/class/input/input5/dynamic_matrix
+    chown system input /sys/class/input/input5/threshold
+    chown system input /sys/class/input/input5/distortion
+    chown system input /sys/class/input/input5/shape
+    write /sys/class/input/input5/distortion "350 50 15"
+    write /sys/class/input/input5/static_matrix "10602 -980 25 -830 10470 -188 2753 1005 9019"
+    chown system input /sys/class/input/input6/filter_enable
+    chown system input /sys/class/input/input6/filter_len
+    chown system input /sys/class/input/input6/data
+    chown system input /sys/class/input/input6/status
+    chown system input /sys/class/input/input6/wake
+    chown system input /sys/class/input/input6/position
+    chown compass input /sys/class/input/input6/offsets
+    chown compass input /sys/class/input/input6/dynamic_matrix
+    chown system input /sys/class/input/input6/threshold
+    chown system input /sys/class/input/input6/distortion
+    chown system input /sys/class/input/input6/shape
+    write /sys/class/input/input6/distortion "350 50 15"
+    write /sys/class/input/input6/static_matrix "10602 -980 25 -830 10470 -188 2753 1005 9019"
+    chown compass input /sys/class/input/input7/offsets
+    chown compass input /sys/class/input/input7/dynamic_matrix
+    chown system input /sys/class/input/input7/threshold
+    chown system input /sys/class/input/input7/distortion
+    chown system input /sys/class/input/input7/shape
+    write /sys/class/input/input7/distortion "350 50 15"
+    write /sys/class/input/input7/static_matrix "10602 -980 25 -830 10470 -188 2753 1005 9019"
+
+# GPIO DVS
+    chown radio system /sys/class/secgpio_check/secgpio_check_all/check_init_detail
+    chown radio system /sys/class/secgpio_check/secgpio_check_all/check_sleep_detail
+    chown radio system /sys/class/secgpio_check/secgpio_check_all/gpioinfo_check
+    chown radio system /sys/class/secgpio_check/secgpio_check_all/gpioinit_check
+    chown radio system /sys/class/secgpio_check/secgpio_check_all/gpiosleep_check
+
+# GPS
+    chown root system /dev/ttySAC1
+    chmod 0660 /dev/ttySAC1
+    chown root system /sys/class/sec/gps/GPS_PWR_EN/value
+    chmod 0664 /sys/class/sec/gps/GPS_PWR_EN/value
+    mkdir /data/system 0771 system system
+    chown system system /data/system
+    mkdir /data/system/gps 0771 system system
+    chown system system /data/system/gps
+    mkdir /vendor/etc 0771 system system
+    chown system system /vendor/etc
+    rm /data/system/gps/gps_started
+    rm /data/system/gps/glonass_started
+    rm /data/system/gps/beidou_started
+    rm /data/system/gps/smd_started
+    rm /data/system/gps/sv_cno.info
+# Create directories for gpsone_daemon services
+    mkdir /data/misc/gpsone_d 0770 system gps
+# Create directories for QuIPS
+    mkdir /data/misc/quipc 0770 system gps
+# Create directories for Location services
+    mkdir /data/misc/location 0770 gps gps
+    mkdir /data/misc/location/mq 0770 gps gps
+    mkdir /data/misc/location/xtwifi 0770 gps gps
+
+# Audio
+    mkdir /data/local/audio 0775 media audio
+    chown media audio /data/local/audio
+
+# Camera
+    chown radio system /sys/devices/platform/samsung-pd.5/s3c-fimc.2/range_mode
+    chmod 0660 /sys/devices/platform/samsung-pd.5/s3c-fimc.2/range_mode
+
+# Permissions for Touchkey
+    chown system radio /sys/class/sec/sec_touchkey/touchkey_dummy_btn1
+    chown system radio /sys/class/sec/sec_touchkey/touchkey_dummy_btn3
+    chown system radio /sys/class/sec/sec_touchkey/touchkey_dummy_btn5
+    chown system radio /sys/class/sec/sec_touchkey/extra_button_event
+    chown system radio /sys/class/sec/sec_touchkey/touchkey_button_all
+    chown system radio /sys/class/sec/sec_touchkey/touchkey_threshold
+    chmod 0660 /sys/class/sec/sec_touchkey/extra_button_event
+
+# Permissions for Hall IC
+    chown system radio /sys/class/sec/sec_key/hall_detect
+
+# Battery node
+    chown system radio /sys/class/power_supply/battery/batt_error_test
+    chown system radio /sys/class/power_supply/battery/batt_slate_mode
+    chown system radio /sys/class/power_supply/battery/batt_temp_adc_cal
+    chown system radio /sys/class/power_supply/battery/batt_vf_adc
+    chown system radio /sys/class/power_supply/battery/batt_vol_adc
+    chown system radio /sys/class/power_supply/battery/batt_vol_adc_aver
+    chown system radio /sys/class/power_supply/battery/batt_vol_adc_cal
+    chown system radio /sys/class/power_supply/battery/batt_vol_aver
+    chown system radio /sys/class/power_supply/battery/factory_mode
+    chown system radio /sys/class/power_supply/battery/siop_activated
+    chown system radio /sys/class/power_supply/battery/siop_level
+    chown system radio /sys/class/power_supply/battery/update
 
 # IR_LED
-    chown system radio /sys/class/sec/sec_ir/ir_send
-    chown system radio /sys/class/sec/sec_ir/ir_send_result
+    chown system system /sys/class/sec/sec_ir/ir_send
+    chown system system /sys/class/sec/sec_ir/ir_send_result
 
-# make param block device link for SysScope
-    symlink /dev/block/mmcblk0p4 /dev/block/param
-
-# GPS init
-    mkdir /data/gps
-    chown gps system /data/gps
-    chmod 1770 /data/gps
-    write /sys/class/sec/gps/GPS_PWR_EN/export 162
-    write /sys/class/sec/gps/GPS_PWR_EN/value 0
-    write /sys/class/sec/gps/GPS_PWR_EN/direction out
-    chown gps system /sys/class/sec/gps/GPS_PWR_EN/value
-    chmod 0664 /sys/class/sec/gps/GPS_PWR_EN/value
-    chown gps system /dev/ttySAC1
-    chmod 0660 /dev/ttySAC1
-    restorecon /sys/class/sec/gps/export
-    restorecon /sys/class/sec/gps/GPS_PWR_EN/value
-    restorecon /sys/class/sec/gps/GPS_PWR_EN/direction
-
-# Restorecon
-    restorecon_recursive /efs
-    write /data/.cid.info 0
+# SELinux
+    restorecon_recursive /data/system/gps
+    restorecon /data/system/yas*
     restorecon /data/.cid.info
-    restorecon /data/ISP_CV
-    restorecon_recursive /efs/wifi
+    restorecon_recursive /efs
+    restorecon_recursive /tombstones/qcks
 
-on property:init.svc.macloader=stopped
+############################
+on boot
+############################
+
+# Changing scheduler to noop during boot
+    write /sys/block/mmcblk0/queue/scheduler noop
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor performance
+
+# Changing scheduler to cfq and reseting cpu min freq to -1 after boot complete
+on property:sys.boot_completed=1
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor pegasusq
+    write /sys/block/mmcblk0/queue/scheduler cfq
+    write /sys/power/cpufreq_min_limit -1
+
+# epen
+    chown system system /sys/class/sec/sec_epen/epen_saving_mode
+    chmod 660 /sys/class/sec/sec_epen/epen_saving_mode
+
+# To prevent out of order acknowledgements from making
+# connection tracking to treat them as not belonging to
+# the connection they belong to.
+# Otherwise, a weird issue happens in which some long
+# connections on high-throughput links get dropped when
+# an ack packet comes out of order
+    write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
+
+# MACloader
+    rm /data/.cid.info
+    rm /efs/wifi/.mac.info
+    copy /efs/wifi/.mac.cob /efs/wifi/.mac.info
+    chown system system /efs/wifi/.mac.cob
+    chown system system /efs/wifi/.mac.info
+    chmod 0666 /efs/wifi/.mac.cob
+    chmod 0666 /efs/wifi/.mac.info
+    start macloader
+    write /data/.cid.info murata
     chown system root /data/.cid.info
     chmod 0666 /data/.cid.info
-    chown system root /data/.rev
-    chmod 0666 /data/.rev
 
-on fs
-    # zram
-    swapon_all /fstab.smdk4x12
+############################
+# Services
+############################
 
-on boot
 # cbd
 service cpboot-daemon /system/bin/cbd -d
     class main
@@ -110,16 +350,22 @@ service cpboot-daemon /system/bin/cbd -d
     group radio cache inet misc audio sdcard_rw log
     seclabel u:r:cpboot-daemon:s0
 
-# serial keyboard daemon
-service sec_keyboard /system/vendor/bin/sec_keyboard /dev/ttySAC2
-	class core
-	group system
-	seclabel u:r:sec_keyboard:s0
-
-# Start GPS daemon
-service gps-daemon /vendor/bin/glgps
+service geomagneticd /system/bin/geomagneticd
     class main
-    socket gps seqpacket 0660 gps system
+    user compass
+    group system input
+    seclabel u:r:geomagneticd:s0
+
+service gpsd /system/bin/gpsd -c /system/etc/gps.xml
+    class main
     user gps
-    group system wakelock inet sdcard_rw sdcard_r
-    seclabel u:r:glgps:s0
+    group system inet net_raw
+    ioprio be 0
+    seclabel u:r:gpsd:s0
+
+service orientationd /system/bin/orientationd
+    class main
+    user compass
+    group input
+    seclabel u:r:orientationd:s0
+

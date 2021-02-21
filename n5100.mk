@@ -25,7 +25,7 @@ PRODUCT_COPY_FILES += \
     device/samsung/n5100/rootdir/init.target.rc:root/init.target.rc \
     $(LOCAL_PATH)/rootdir/init.target.usb.rc:root/init.target.usb.rc
 
-$(call inherit-product-if-exists, vendor/samsung/5100/n5100-vendor.mk)
+$(call inherit-product-if-exists, vendor/samsung/n5100/n5100-vendor-blobs.mk)
 
 # Vendor properties
 -include $(LOCAL_PATH)/vendor_prop.mk

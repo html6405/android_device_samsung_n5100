@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-# Include n80xx BoardConfigCommon
+# Include kona BoardConfigCommon
 -include device/samsung/kona-common/BoardConfigCommon.mk
 
 # assert

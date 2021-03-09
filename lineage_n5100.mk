@@ -27,6 +27,6 @@ PRODUCT_MANUFACTURER := samsung
 PRODUCT_BUILD_PROP_OVERRIDES += \
 		PRODUCT_NAME=kona3gxx \
 		TARGET_DEVICE=kona3g \
-		PRIVATE_BUILD_DESC="kona3gxx-user 4.4.4 KTU84P N5100ZTCNL6 release-keys"
+		PRIVATE_BUILD_DESC="kona3gxx-user 4.4.2 KOT49H N5100XXSDQA2 release-keys"
 
-BUILD_FINGERPRINT := samsung/kona3gxx/kona3g:4.4.4/KTU84P/N5100ZTCNL6:user/release-keys
+BUILD_FINGERPRINT := samsung/kona3gxx/kona3g:4.4.2/KOT49H/N5100XXSDQA2:user/release-keys

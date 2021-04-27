@@ -329,7 +329,6 @@ on property:sys.boot_completed=1
 
 # MACloader
     rm /data/.cid.info
-    rm /efs/wifi/.mac.info
     copy /efs/wifi/.mac.cob /efs/wifi/.mac.info
     chown system system /efs/wifi/.mac.cob
     chown system system /efs/wifi/.mac.info

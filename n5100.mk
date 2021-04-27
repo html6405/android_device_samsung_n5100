@@ -25,6 +25,9 @@ PRODUCT_COPY_FILES += \
     device/samsung/n5100/rootdir/init.target.rc:root/init.target.rc \
     $(LOCAL_PATH)/rootdir/init.target.usb.rc:root/init.target.usb.rc
 
+# HIDL
+DEVICE_MANIFEST_FILE := $(LOCAL_PATH)/manifest.xml
+
 $(call inherit-product-if-exists, vendor/samsung/n5100/n5100-vendor-blobs.mk)
 
 # Vendor properties

@@ -22,3 +22,11 @@ PRODUCT_NAME := lineage_n5100
 PRODUCT_BRAND := samsung
 PRODUCT_MODEL := GT-N5100
 PRODUCT_MANUFACTURER := samsung
+
+# Set build fingerprint / ID / Product Name ect.
+PRODUCT_BUILD_PROP_OVERRIDES += \
+		PRODUCT_NAME=kona3gxx \
+		TARGET_DEVICE=kona3g \
+		PRIVATE_BUILD_DESC="kona3gxx-user 4.4.2 KOT49H N5100XXSDQA2 release-keys"
+
+BUILD_FINGERPRINT := samsung/kona3gxx/kona3g:4.4.2/KOT49H/N5100XXSDQA2:user/release-keys

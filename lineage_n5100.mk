@@ -2,9 +2,9 @@
 PRODUCT_RELEASE_NAME := n5100
 
 # Inherit device configuration
-$(call inherit-product, device/samsung/n5100/n5100.mk)
-$(call inherit-product, device/samsung/kona-common/kona-common.mk)
 $(call inherit-product, device/samsung/smdk4412-common/common.mk)
+$(call inherit-product, device/samsung/kona-common/kona-common.mk)
+$(call inherit-product, device/samsung/n5100/n5100.mk)
 
 # Inherit from the common Open Source product configuration
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)

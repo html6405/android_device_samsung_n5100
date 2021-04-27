@@ -14,8 +14,6 @@
 # limitations under the License.
 #
 
-$(call inherit-product, device/samsung/kona-common/kona-common.mk)
-
 LOCAL_PATH := device/samsung/n5100
 
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay

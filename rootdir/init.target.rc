@@ -354,20 +354,20 @@ service cpboot-daemon /system/bin/cbd -d
     group radio cache inet misc audio sdcard_rw log
     seclabel u:r:cpboot-daemon:s0
 
-service geomagneticd /system/vendor/bin/geomagneticd
+service geomagneticd /vendor/bin/geomagneticd
     class main
     user compass
     group system input
     seclabel u:r:geomagneticd:s0
 
-service gpsd /system/vendor/bin/gpsd -c /system/vendor/etc/gps.xml
+service gpsd /vendor/bin/gpsd -c /vendor/etc/gps.xml
     class main
     user gps
     group system inet net_raw
     ioprio be 0
     seclabel u:r:gpsd:s0
 
-service orientationd /system/vendor/bin/orientationd
+service orientationd /vendor/bin/orientationd
     class main
     user compass
     group input

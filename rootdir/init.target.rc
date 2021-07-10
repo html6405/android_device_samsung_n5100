@@ -368,6 +368,7 @@ service gpsd /vendor/bin/gpsd -c /vendor/etc/gps.xml
     group system inet net_raw
     ioprio be 0
     seclabel u:r:gpsd:s0
+    setenv LD_PRELOAD "/vendor/lib/libsamsung_symbols.so"
 
 service orientationd /vendor/bin/orientationd
     class main

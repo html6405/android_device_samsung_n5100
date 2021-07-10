@@ -374,5 +374,5 @@ service orientationd /vendor/bin/orientationd
     class main
     user compass
     group input
-    seclabel u:r:orientationd:s
+    seclabel u:r:orientationd:s0
 

@@ -19,7 +19,7 @@
 set -e
 
 DEVICE=n5100
-VENDOR=n5100
+VENDOR=samsung
 
 # Load extract_utils and do some sanity checks
 MY_DIR="${BASH_SOURCE%/*}"

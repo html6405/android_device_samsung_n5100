@@ -353,19 +353,19 @@ on fs
 ############################
 
 # cbd
-service cpboot-daemon /vendor/bin/cbd -d
+service vendor.cpboot-daemon /vendor/bin/cbd -d
     class main
     user root
     group radio cache inet misc audio sdcard_rw log
     seclabel u:r:cpboot-daemon:s0
 
-service geomagneticd /vendor/bin/geomagneticd
+service vendor.geomagneticd /vendor/bin/geomagneticd
     class main
     user compass
     group system input
     seclabel u:r:geomagneticd:s0
 
-service gpsd /vendor/bin/gpsd -c /vendor/etc/gps.xml
+service vendor.gpsd /vendor/bin/gpsd -c /vendor/etc/gps.xml
     class main
     user gps
     group system inet net_raw
@@ -373,7 +373,7 @@ service gpsd /vendor/bin/gpsd -c /vendor/etc/gps.xml
     seclabel u:r:gpsd:s0
     setenv LD_PRELOAD "/vendor/lib/libsamsung_symbols.so"
 
-service orientationd /vendor/bin/orientationd
+service vendor.orientationd /vendor/bin/orientationd
     class main
     user compass
     group input

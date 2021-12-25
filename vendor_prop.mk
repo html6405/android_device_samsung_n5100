@@ -23,7 +23,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	dalvik.vm.dex2oat-Xmx=256m \
 	ro.sf.lcd_density=213 \
 	ro.lcd_min_brightness=20 \
-	rild.libpath=/vendor/lib/libsecril-shim.so \
+	vendor.rild.libpath=/vendor/lib/libsecril-shim.so \
     ro.ril.telephony.mqanelements=5 \
 	ro.ril.telephony.nstrings=4
 

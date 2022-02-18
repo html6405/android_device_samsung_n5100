@@ -23,6 +23,6 @@ N5100 := true
 TARGET_KERNEL_CONFIG := lineageos_n5100_defconfig
 
 # Selinux
-BOARD_SEPOLICY_DIRS += device/samsung/kona-common/selinux/vendor
+BOARD_VENDOR_SEPOLICY_DIRS += device/samsung/kona-common/selinux/vendor
 SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS += device/samsung/kona-common/selinux/public
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += device/samsung/kona-common/selinux/private

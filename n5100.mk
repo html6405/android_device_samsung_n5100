@@ -25,6 +25,10 @@ PRODUCT_COPY_FILES += \
 # HIDL
 DEVICE_MANIFEST_FILE := $(LOCAL_PATH)/manifest.xml
 
+# RIL
+PRODUCT_PACKAGES += \
+	libsecril-shim
+
 $(call inherit-product-if-exists, vendor/samsung/n5100/n5100-vendor-blobs.mk)
 
 # Vendor properties

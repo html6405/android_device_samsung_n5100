@@ -344,10 +344,6 @@ on property:sys.boot_completed=1
     chown system root /data/.cid.info
     chmod 0666 /data/.cid.info
 
-on fs
-    # zram
-    swapon_all /vendor/etc/fstab.smdk4x12
-
 ############################
 # Services
 ############################

@@ -143,7 +143,6 @@ on post-fs-data
     chown system radio /sys/class/sensors/accelerometer_sensor/reactive_alert
     chown system radio /sys/class/sensors/accelerometer_sensor/vendor
     chown system radio /sys/class/sensors/accelerometer_sensor/name
-    write /sys/class/input/input4/enable "1"
 
 # Proximity_sensor
     chown system radio /sys/class/sensors/proximity_sensor/state
